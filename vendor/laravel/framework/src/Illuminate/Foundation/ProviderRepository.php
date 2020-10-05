@@ -150,7 +150,6 @@ class ProviderRepository
                 foreach ($instance->provides() as $service) {
                     $manifest['deferred'][$service] = $provider;
                 }
-
                 $manifest['when'][$provider] = $instance->when();
             }
 
@@ -160,6 +159,7 @@ class ProviderRepository
             else {
                 $manifest['eager'][] = $provider;
             }
+
         }
 
         return $this->writeManifest($manifest);

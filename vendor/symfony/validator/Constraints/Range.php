@@ -46,6 +46,7 @@ class Range extends Constraint
     public $max;
     public $maxPropertyPath;
 
+    // BC layer, to be removed in 5.0
     /**
      * @internal
      */
@@ -75,9 +76,8 @@ class Range extends Constraint
                 $this->deprecatedMinMessageSet = isset($options['minMessage']);
                 $this->deprecatedMaxMessageSet = isset($options['maxMessage']);
 
-                // BC layer, should throw a ConstraintDefinitionException in 6.0
                 if ($this->deprecatedMinMessageSet || $this->deprecatedMaxMessageSet) {
-                    trigger_deprecation('symfony/validator', '4.4', '"minMessage" and "maxMessage" are deprecated when the "min" and "max" options are both set. Use "notInRangeMessage" instead.');
+                    @trigger_error('Since symfony/validator 4.4: "minMessage" and "maxMessage" are deprecated when the "min" and "max" options are both set. Use "notInRangeMessage" instead.', \E_USER_DEPRECATED);
                 }
             }
         }

@@ -32,6 +32,8 @@ trait RegistersUsers
 
         event(new Registered($user = $this->create($request->all())));
 
+        //var_dump($user);
+
         $this->guard()->login($user);
 
         return $this->registered($request, $user)

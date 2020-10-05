@@ -10,9 +10,8 @@ use Doctrine\Common\Collections\Collection;
 /**
  * @ORM\Entity
  * @ORM\Table(name="`objects`")
+ * @ORM\Entity(repositoryClass="Jhg\DoctrinePagination\ORM\PaginatedRepository")
  */
-
-
 class Objects{
 
     /**

@@ -39,26 +39,23 @@ class Category{
      */
     protected $description;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entities\Objects", mappedBy="category")
-     */
-    private $objects;
+//    private $objects;
 
     public function __construct($input)
     {
         $this->setTitle($input['title']);
         $this->setDescription($input['description']);
         $this->setDescription($input['description']);
-        $this->objects = new ArrayCollection();
+//        $this->objects = new ArrayCollection();
     }
 
     /**
      * @return Collection|Objects[]
      */
-    public function getObjects(): Collection
-    {
-        return $this->objects;
-    }
+//    public function getObjects(): Collection
+//    {
+//        return $this->objects;
+//    }
 
 //    private $products;
 //

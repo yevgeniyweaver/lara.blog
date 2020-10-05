@@ -1,0 +1,36 @@
+{
+    "name": "javihgil/doctrine-pagination",
+    "description": "Doctrine pagination",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Jhg\\DoctrinePagination\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Jhg\\DoctrinePagination\\Tests\\": "Tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.1"
+    },
+    "require": {
+        "php": "^7.1",
+        "doctrine/orm": "~2.5"
+    },
+    "scripts": {
+        "test": [
+            "vendor/bin/phpunit"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.1-dev"
+        }
+    }
+}

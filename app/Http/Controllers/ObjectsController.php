@@ -2,76 +2,89 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\CheckUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Repository\ObjectsRepo as repo;
+use Illuminate\Support\Facades\Storage;
 use App\Entities\Objects;
 use Doctrine\ORM\EntityManager;
 use function MongoDB\BSON\toJSON;
-
+use Doctrine\ORM\Tools\Pagination\Paginator;
 //use App\Validation\PostValidator;
 
 class ObjectsController extends Controller
 {
-    //
+
     private $repo;
 
     public function __construct(repo $repo)
     {
         $this->repo = $repo;
+        $this->middleware('isuser')->only('index');
     }
 
 
     public function index()
     {
-        return View('admin.index');//->with(['Data' => $this->repo->retrieve()])
+        //$exists = Storage::disk('public')->exists('upload/8U4rRtlWIKWnPQ0L3gHcaaGo9JyvVE67RFNMRTH2.jpeg');
+        //$repository = $this->repo->showAll();
+        //$repository = $doctrine->getRepository('Task');
+        $objects = $this->repo->showAll();
+        return View('admin.index', compact('objects'));
     }
 
-    protected function create()//array $data
+    public function form($id=NULL)
     {
-        $data =[];
-        $data['title'] = 'ryryyrry';
-        $data['image'] = '/img/one.jpg';
-        $data['category' ]= 1;
-        $data['description'] = 'first object';
-        //$data = [ 'category'=>1,'title'=>'ryryyrry','image'=>'imgonejpg','description'=>'first object' ];
+        return View('admin.create');
+    }
 
-        //Session::flash('msg', 'add success');
-        $re = new \ArrayObject($data);
+
+    protected function create(Request $request)//array $data
+    {
+        $data =$request->all();
+        if($request->file('image')){
+            $path = $request->file('image')->store('upload','public');
+        }else{
+            $path = 'none.png';
+        }
+        $data['image'] = $path;
         $this->repo->create($this->repo->prepareData($data));
-//        $user = new Objects($re);
-//        $user->setTitle($data['title']);
-//        $user->setCategory($data['category']);
-//        $user->setImage($data['image']);
-//        $user->setDescription($data['description']);
+        return redirect()->route('admin.start');
 //        $user->setPassword(bcrypt($data['password']));
-//        EntityManager::persist($user);
-//        EntityManager::flush();
-       // return $user;
+//        EntityManager::persist($user);EntityManager::flush();
     }
 
     public function edit($id=NULL)
     {
-        //var_dump($this->repo->postOfId($id));
-        return View('admin.index')->with(['data' => $this->repo->postOfId($id)]);
+        return View('admin.edit')->with(['data' => $this->repo->postOfId($id)]);
     }
 
-    public function editPost()
+    public function update(Request $request)
     {
-        $all = Input::all();
-        $validate = PostValidator::validate($all);
-        if (!$validate->passes()) {
-            return redirect()->back()->withInput()->withErrors($validate);
+        if (!$request->isMethod('post')){
+            return json_encode(['error'=>'true']);
         }
-        $Id = $this->repo->postOfId($all['id']);
-        if (!is_null($Id)) {
-            $this->repo->update($Id, $all);
-            Session::flash('msg', 'edit success');
+        $data = $request->all();//$validate = PostValidator::validate($all);
+        if($request->file('image')){
+            $path = $request->file('image')->store('upload','public');
+        }else{
+            $path = $data['image_old'];
+        }
+        unset($data['image_old']);
+        $data['image'] = $path;
+//        if (!$validate->passes()) {
+//            return redirect()->back()->withInput()->withErrors($validate);
+//        }
+        $object = $this->repo->postOfId($data['id']);
+
+        if (!is_null($object)) {
+            $this->repo->update($object, $data);//Session::flash('msg', 'edit success');
         } else {
-            $this->repo->create($this->repo->prepare_data($all));
-            Session::flash('msg', 'add success');
+            $this->repo->create($this->repo->prepare_data($data));//Session::flash('msg', 'add success');
         }
-        return redirect()->back();
+        return redirect()->route('admin.start');
     }
 
     public function retrieve()
@@ -79,15 +92,19 @@ class ObjectsController extends Controller
         return View('admin.index')->with(['Data' => $this->repo->retrieve()]);
     }
 
-    public function delete()
+
+    public function delete(Request $request)
     {
-        $id = Input::get('id');
+        $id = $request->id;
         $data = $this->repo->postOfId($id);
         if (!is_null($data)) {
-            $this->repo->delete($data);
-            Session::flash('msg', 'operation Success');
-            return redirect()->back();
+
+            $this->repo->delete($data);//Session::flash('msg', 'operation Success');
+
+            return redirect()->route('admin.start');//redirect()->back();
+
         } else {
+
             return redirect()->back()->withErrors('operationFails');
         }
     }
@@ -105,11 +122,32 @@ class ObjectsController extends Controller
     public function show($id){
         if(!empty($id)){
             $object = $this->repo->show($id);
-//            $re = new \ArrayObject($this->repo->show($id));
-//            $b[] = json_decode(json_encode($this->repo->show($id)), true);
+
             return view('admin.show', compact('object') );
+
         }else{
+
             return redirect()->action($this->showAll());
+        }
+    }
+
+
+    // show list of all objects
+    public function find(Request $request)
+    {
+        if(isset($request->title) && !empty($request->title)){
+            $foundObjects = $this->repo->findByTitle($request->title);
+            if(!empty($foundObjects)){
+
+                return view('admin.find', compact('foundObjects') );
+
+            }else{
+
+                return redirect()->route('admin.start');
+
+            }
+        }else{
+            return redirect()->route('admin.start');
         }
     }
 }

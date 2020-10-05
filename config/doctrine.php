@@ -35,6 +35,11 @@ return [
             'paths'         => [
                 base_path('app/Entities')
             ],
+//            'mappings'      => [
+//                App\Infrastructure\Mappings\Fluent\TaskMapping::class,
+//                App\Infrastructure\Mappings\Fluent\UserMapping::class,
+//                App\Infrastructure\Mappings\Fluent\NameMapping::class
+//            ],
             'repository'    => Doctrine\ORM\EntityRepository::class,
             'proxies'       => [
                 'namespace'     => false,

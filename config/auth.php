@@ -40,7 +40,6 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-
         'api' => [
             'driver' => 'token',
             'provider' => 'users',
@@ -65,12 +64,15 @@ return [
     |
     */
 
+//    'driver' => 'doctrine',
+//    'model' => App\User::class,
+
     'providers' => [
         'users' => [
-            'driver' => 'eloquent',
-            'model' => App\User::class,
+            'driver' => 'doctrine',//eloquent doctrine
+            'model' => App\Entities\User::class,//App\Entities\User::class,//App\User::class
+            //'table' => 'users',
         ],
-
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -94,7 +96,8 @@ return [
 
     'passwords' => [
         'users' => [
-            'provider' => 'users',
+            'driver' => 'doctrine',
+//            'provider' => 'users',//'users'
             'table' => 'password_resets',
             'expire' => 60,
         ],

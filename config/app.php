@@ -168,17 +168,11 @@ return [
 
         LaravelDoctrine\ORM\DoctrineServiceProvider::class,
 
+        LaravelDoctrine\ACL\AclServiceProvider::class,
+
+        LaravelDoctrine\Extensions\GedmoExtensionsServiceProvider::class,
+
         /* Sonata Bundles */
-
-        Symfony\Bundle\SecurityBundle\SecurityBundle::class,
-        Sonata\BlockBundle\SonataBlockBundle::class,
-        Knp\Bundle\MenuBundle\KnpMenuBundle::class,
-        Sonata\AdminBundle\SonataAdminBundle::class,
-        Sonata\Doctrine\Bridge\Symfony\SonataDoctrineBundle::class,
-        Sonata\Form\Bridge\Symfony\SonataFormBundle::class,
-        Sonata\Twig\Bridge\Symfony\SonataTwigBundle::class,
-
-        Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle::class,
 
 
         /*
