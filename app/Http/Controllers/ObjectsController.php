@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Middleware\CheckUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\{Controller,HomeController};
+//use App\Http\Controllers\HomeController;
 use App\Repository\ObjectsRepo as repo;
 use Illuminate\Support\Facades\Storage;
 use App\Entities\Objects;
@@ -28,6 +29,9 @@ class ObjectsController extends Controller
 
     public function index()
     {
+        var_dump(HomeController::getStatic('erororr'));
+        HomeController::setPrivate('private');
+        var_dump(HomeController::getPrivate());
         //$exists = Storage::disk('public')->exists('upload/8U4rRtlWIKWnPQ0L3gHcaaGo9JyvVE67RFNMRTH2.jpeg');
         //$repository = $this->repo->showAll();
         //$repository = $doctrine->getRepository('Task');

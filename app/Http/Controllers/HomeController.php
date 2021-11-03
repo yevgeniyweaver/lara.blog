@@ -25,4 +25,21 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    protected static $private;
+
+    static public function setPrivate($private)
+    {
+        self::$private = $private;
+    }
+    static public function getPrivate()
+    {
+        return self::$private;
+    }
+    static $repost;
+    static public function getStatic($description)
+    {
+        self::$repost = $description;
+        return self::$repost;
+    }
 }
